@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    margin: 0; padding: 0;
+    box-sizing: border-box;
+    font-family: 'Work Sans', sans-serif;
+    color: #FFFFFF;
+}
+
+body {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #000000;
+
+    .navbar {
+        padding: 20px;
+        position: fixed;
+        top: 0;
+        left: 0;
+    }
+
+    .card {
+        width: 400px;
+        height: 400px;
+        border-radius: 4px;
+        box-shadow: 1px 1px 5px #000;
+        padding: 40px;
+
+        form {
+            .card-title {
+                font-size: 2rem;
+                text-transform: capitalize;
+                text-align: center;
+            }
+
+            .card-greeting {
+                text-align: center;
+                margin: 10px 0 20px 0;
+            }
+
+            .authenticate-select {
+                display: flex;
+                width: 100%;
+                background: rgba(0, 0, 0, 1);
+
+                .signin-btn {
+                    width: 100%;
+                    text-align: center;
+                    padding: 8px 20px;
+                    text-transform: capitalize;
+                    border-radius: 4px;
+                }
+
+                .signup-btn {
+                    width: 100%;
+                    text-align: center;
+                    padding: 8px 20px;
+                    text-transform: capitalize;
+                    border-radius: 4px;
+                }
+            }
+
+            .input-box {
+                width: 100%;
+                margin: 10px 0;
+
+                .input-textbox {
+                    width: 100%;
+                    padding: 10px 20px;
+                    background: #181C14;
+                    outline: none;
+                    border: none;
+                    border-radius: 4px;
+                }
+            }
+
+            .btn-submit {
+                width: 100%;
+                padding: 10px 20px;
+                background: #FFFFFF;
+                outline: none;
+                border: none;
+                color: #000000;
+                border-radius: 4px;
+                text-transform: capitalize;
+            }
+        }
+    }
+}
+
+.--active {
+    background: #181818;
+}
+
+.--text-none {
+    text-decoration: none;
+}

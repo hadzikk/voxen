@@ -11,10 +11,3 @@ var channel = Echo.channel('my-channel');
 channel.listen('.my-event', function(data) {
   alert(JSON.stringify(data));
 });
-/**
- * Echo exposes an expressive API for subscribing to channels and listening
- * for events that are broadcast by Laravel. Echo and event broadcasting
- * allow your team to quickly build robust real-time web applications.
- */
-
-import './echo';
