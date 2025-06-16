@@ -7,13 +7,13 @@
     <div class="chat-container">
         <div class="sidebar-left">
             <div class="sidebar-left-header">
-                <h1 class="greeting-user">Welcome <span class="user-fullname">Hadzik Mochamad Sofyan</span></h1>
+                <h1 class="greeting-user">Welcome <span class="user-fullname">{{ $user->firstname." ".$user->lastname }}</span></h1>
                 <div class="profile-user">
                     <figure class="user-picture-container">
-                        <img src="{{ asset('images/IMG-20220709-WA0126.jpeg') }}" alt="" class="user-picture">
+                        <img src="{{ $user->picture ? asset() }}" alt="" class="user-picture">
                     </figure>
                     <div class="user-info">    
-                        <p class="username">hadzik</p> 
+                        <p class="username">{{ $user->username }}</p> 
                         <p class="identity">You</p>
                     </div>
                 </div>
@@ -28,15 +28,15 @@
             </div>
 
             <ul>
-                @foreach ($users as $user)
+                @foreach ($contacts as $contact)
                 <li>
-                    <a href="/chat/p/{{ $user['username'] }}">
+                    <a href="/chat/p/{{ $contact['username'] }}">
                         <figure class="contact-picture-container">
                             <img src="{{ asset('images/Deafult PFP _ @davy3k.jpg') }}" alt="" class="contact-picture">
                         </figure>
                         <div class="contact-info-container">
                             <div class="contact-info">
-                                <p class="contact-name">{{ $user['username'] }}</p>
+                                <p class="contact-name">{{ $contact['username'] }}</p>
                                 <p class="time">00:12</p>
                             </div>
                             <div class="contact-additional-info">
@@ -50,7 +50,7 @@
 
         </div>
 
-        <div class="chat-main" style="background: url('{{ asset('images/Download Abstract Black Waves Texture Wallpaper _ Wallpapers_com.jpg') }}'); background-position: center; background-size: cover;">
+        <div class="chat-main">
             <div class="conversation-header">
                 <p style="font-size: small">&copy; voxen By Hadzik Mochamad Sofyan 2025 Allrights Reserved.</p>
                 <h1 class="conversation-title">choose a chat and start the conversation</h1>

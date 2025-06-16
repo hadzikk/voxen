@@ -9,7 +9,7 @@
 
     <div class="container">
         <div class="card">
-            <form action="/auth/signup" method="post">
+            <form action="/auth" method="POST">
                 @csrf
                 <h2 class="card-title">welcome back</h2>
                 <p class="card-greeting">hey <strong>user</strong>, please enter your details</p>

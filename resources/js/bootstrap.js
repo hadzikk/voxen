@@ -1,20 +1,11 @@
-import Echo from 'laravel-echo'
+import Echo from 'laravel-echo';
+
+import Pusher from 'pusher-js';
+window.Pusher = Pusher;
 
 window.Echo = new Echo({
-  broadcaster: 'pusher',
-  key: 'f8aa202a36b2bd207ad2',
-  cluster: 'ap1',
-  forceTLS: true
+    broadcaster: 'pusher',
+    key: import.meta.env.VITE_PUSHER_APP_KEY,
+    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
+    forceTLS: true
 });
-
-var channel = Echo.channel('my-channel');
-channel.listen('.my-event', function(data) {
-  alert(JSON.stringify(data));
-});
-/**
- * Echo exposes an expressive API for subscribing to channels and listening
- * for events that are broadcast by Laravel. Echo and event broadcasting
- * allow your team to quickly build robust real-time web applications.
- */
-
-import './echo';

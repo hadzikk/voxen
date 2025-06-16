@@ -9,7 +9,7 @@
 
     <div class="container">
         <div class="card">
-            <form action="" method="post">
+            <form action="/auth/verify" method="post">
                 @csrf
                 <h2 class="card-title">welcome back</h2>
                 <p class="card-greeting">hey <strong>user</strong>, please enter your details</p>
@@ -21,11 +21,11 @@
 
                 <div class="input-box">
                     <div class="input-username-icon"></div>
-                    <input type="text" class="input-textbox" placeholder="Enter your username here...">
+                    <input type="text" name="username" class="input-textbox" placeholder="Enter your username here...">
                 </div>
                 <div class="input-box">
                     <div class="input-password-icon"></div>
-                    <input type="text" class="input-textbox" placeholder="Enter your password here...">
+                    <input type="password" name="password" class="input-textbox" placeholder="Enter your password here...">
                 </div>
 
                 <button class="btn-submit" type="submit">continue</button>
