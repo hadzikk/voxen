@@ -2,7 +2,9 @@
     <x-slot:title>{{ $title }}</x-slot:title>
     <x-slot:styles>
         <link rel="stylesheet" href="{{ asset('css/auth/signin.scss') }}">
+        <link rel="stylesheet" href="{{ asset('css/component/notification.scss') }}">
     </x-slot:styles>
+
     <nav class="navbar">
         <a href="/"><i class="fa-solid fa-arrow-left"></i></a>
     </nav>
@@ -32,4 +34,6 @@
             </form>
         </div>
     </div>
+
+    <x-app.notification></x-app.notification>
 </x-app.layout>

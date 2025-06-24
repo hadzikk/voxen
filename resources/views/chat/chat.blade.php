@@ -5,8 +5,8 @@
     </x-slot:styles>
 
     <div class="chat-container">
-        <x-chat.sidebar-left :contacts="$contacts" />
-        <x-chat.main />
+        <x-chat.sidebar-left :users="$users" />
+        <x-chat.chat-main />
         <x-chat.sidebar-right />
     </div>
 </x-app.layout>

@@ -1,0 +1,30 @@
+.notification-container {
+    position: absolute;
+    width: 100%;
+    padding: 40px 0;
+    display: flex;
+    justify-content: center;
+    top: 0;
+    left: 0;
+
+    .notification {
+        width: fit-content;
+        height: 50px;
+        background: #FFF;
+        border-radius: 4px;
+        padding: 15px;
+        text-align: center;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+
+        .notification-text {
+            color: #000;
+        }
+
+        .notification-icon {
+                color: #000;
+        }
+    }
+}

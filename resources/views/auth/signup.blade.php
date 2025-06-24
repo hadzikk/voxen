@@ -2,6 +2,7 @@
     <x-slot:title>{{ $title }}</x-slot:title>
     <x-slot:styles>
         <link rel="stylesheet" href="{{ asset('css/auth/signin.scss') }}">
+        <link rel="stylesheet" href="{{ asset('css/component/notification.scss') }}">
     </x-slot:styles>
     <nav class="navbar">
         <a href="/"><i class="fa-solid fa-arrow-left"></i></a>
@@ -9,7 +10,7 @@
 
     <div class="container">
         <div class="card">
-            <form action="/auth" method="POST">
+            <form action="/auth/signup" method="POST">
                 @csrf
                 <h2 class="card-title">welcome back</h2>
                 <p class="card-greeting">hey <strong>user</strong>, please enter your details</p>

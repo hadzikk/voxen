@@ -50,7 +50,7 @@ class AuthController extends Controller
         ]);
     }
 
-    public function verify(Request $request) 
+    public function verify(Request $request)
     {
         $credentials = $request->validate([
             'username' => ['required'],
@@ -60,11 +60,13 @@ class AuthController extends Controller
         $user = User::where('username', $credentials['username'])->first();
 
         if (!$user || !Hash::check($credentials['password'], $user->password)) {
-            return back()->withErrors([
-                'username' => 'username or password is not correct'
-            ])->onlyInput('username');
+            return back()->with('error', 'Incorrect username or password')
+                        ->withInput(['username' => $credentials['username']]);
         }
+
         Auth::login($user);
-        return redirect()->intended('/chat');
+
+        return redirect('/auth/signin')->with('success', 'Successful login! redirects to the chat page...');
     }
+
 }

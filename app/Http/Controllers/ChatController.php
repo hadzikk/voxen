@@ -41,7 +41,7 @@ class ChatController extends Controller
         ]);
     }
 
-    public function personal($username) 
+    public function group($username) 
     {   
         try {
             $title = 'Chat';
@@ -63,7 +63,7 @@ class ChatController extends Controller
             return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
         }
 
-        return view('chat.personal', [
+        return view('chat.group', [
             'contacts' => $contacts,
             'receiver' => $receiver,
             'messages' => $messages,
