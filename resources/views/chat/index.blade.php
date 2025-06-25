@@ -5,7 +5,7 @@
     </x-slot:styles>
 
     <div class="chat-container">
-        <x-chat.sidebar-left :contacts="$contacts" />
+        <x-chat.sidebar-left :dataset="[]" mode="default" />
         <x-chat.main />
         <x-chat.sidebar-right />
     </div>

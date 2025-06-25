@@ -1,4 +1,4 @@
-@props(['contacts'])
+@props(['dataset' => [], 'mode' => 'default'])
 
 <div class="sidebar-left">
     <div class="sidebar-left-header">
@@ -15,29 +15,36 @@
     </div>
 
     <div class="sidebar-left-navbar">
-        <i class="fa-solid icon-left-navbar fa-comment"></i>
-        <i class="fa-solid icon-left-navbar fa-address-book"></i>
-        <i class="fa-solid icon-left-navbar fa-user-plus"></i>
+        <a href="/chat/friends"><i class="fa-solid icon-left-navbar fa-address-book"></i></a>
+        <a href="/chat/addfriend"><i class="fa-solid icon-left-navbar fa-user-plus"></i></a>
+        <a href="/chat/conversations"><i class="fa-solid icon-left-navbar fa-comment"></i></a>
     </div>
 
     <ul>
-        @foreach ($contacts as $contact)
-        <li>
-            <a href="/chat/p/{{ $contact['username'] }}">
-                <figure class="contact-picture-container">
-                    <img src="{{ $contact['picture'] ? asset('storage/images/' . $contact['picture']) : asset('images/Deafult PFP _ @davy3k.jpg') }}" alt="" class="contact-picture">
-                </figure>
-                <div class="contact-info-container">
-                    <div class="contact-info">
-                        <p class="contact-name">{{ $contact['username'] }}</p>
-                        <p class="time">00:12</p>
+        @if ($mode === "friends")
+            @foreach ($dataset as $friend)
+            <li>
+                <a href="/chat/p/{{ $friend['username'] }}">
+                    <figure class="contact-picture-container">
+                        <img src="{{ $friend['picture'] ? asset('storage/images/' . $friend['picture']) : asset('images/Deafult PFP _ @davy3k.jpg') }}" alt="" class="contact-picture">
+                    </figure>
+                    <div class="contact-info-container">
+                        <div class="contact-info">
+                            <p class="contact-name">{{ $friend['username'] }}</p>
+                            <p class="time">00:12</p>
+                        </div>
+                        <div class="contact-additional-info">
+                            <p class="contact-last-chat">{{ Str::limit('p', 26, '...') }}</p>
+                        </div>
                     </div>
-                    <div class="contact-additional-info">
-                        <p class="contact-last-chat">{{ Str::limit('p', 26, '...') }}</p>
-                    </div>
-                </div>
-            </a>
-        </li>
-        @endforeach
+                </a>
+            </li>
+            @endforeach
+
+        @elseif ($mode === "conversation")
+            <p>this is conversation mode</p>
+
+        @elseif ($mode === "default")
+        @endif
     </ul>
 </div>

@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Events\Chat;
 use App\Models\Message;
 use Illuminate\Support\Facades\Auth;
+use function PHPUnit\Framework\returnArgument;
 
 class ChatController extends Controller
 {
@@ -15,38 +16,21 @@ class ChatController extends Controller
     {
         $title = 'Chat';
         $user = Auth::user();
-        $contacts = User::all();
-
+        $friends = User::all();
+        
         return view('chat.index', [
             'title' => $title,
             'user' => $user,
-            'contacts' => $contacts,
+            'friends' => $friends,
         ]);
     }
-
-    public function person($username)
-    {
-        $contacts = User::all();
-        $user = User::where('username', $username)->first();
-        $title = 'Chat';
-        $message = "hello world, this chat was sent using pusher!";
-
-        broadcast(new Chat($message))->toOthers();
-
-        return view('chat.personal', 
-        [
-                'contacts' => $contacts,
-                'user' => $user, 
-                'title' => $title
-        ]);
-    }
-
+    
     public function group($username) 
     {   
         try {
             $title = 'Chat';
         
-            $contacts = User::all();
+            $friends = User::all();
 
             $receiver = User::where('username', $username)->first();
 
@@ -64,12 +48,29 @@ class ChatController extends Controller
         }
 
         return view('chat.group', [
-            'contacts' => $contacts,
+            'friends' => $friends,
             'receiver' => $receiver,
             'messages' => $messages,
             'title' => $title,
         ]); 
     }
+    public function person($username)
+    {
+        $friends = User::all();
+        $user = User::where('username', $username)->first();
+        $title = 'Chat';
+        $message = "hello world, this chat was sent using pusher!";
+
+        broadcast(new Chat($message))->toOthers();
+
+        return view('chat.personal', 
+        [
+                'friends' => $friends,
+                'user' => $user, 
+                'title' => $title
+        ]);
+    }
+
 
     public function send(Request $request) 
     {
@@ -82,5 +83,34 @@ class ChatController extends Controller
         broadcast(new Chat($message))->toOthers();
 
         return response()->json(['status' => 'Message sent successfuly']);
+    }
+
+    public function friends()
+    {
+        $title = "Chat";
+        $friends = User::all();
+
+        return view('chat.friends', [
+            'title' => $title,
+            'friends' => $friends,
+        ]);
+    }
+
+    public function addfriend()
+    {
+        $title = "Add friend";
+
+        return view('chat.addfriend', ['title' => $title]);
+    }
+
+    public function conversations()
+    {
+        $title = "Chat";
+        $conversations = [];
+
+        return view('chat.group', [
+            'title' => $title,
+            'conversations' => $conversations,
+        ]);
     }
 }
