@@ -7,7 +7,10 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Events\Chat;
 use App\Models\Message;
+use App\Models\FriendRequest;
+use App\Models\Friend;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use function PHPUnit\Framework\returnArgument;
 
 class ChatController extends Controller
@@ -96,11 +99,78 @@ class ChatController extends Controller
         ]);
     }
 
-    public function addfriend()
+    public function addFriend()
     {
         $title = "Add friend";
 
         return view('chat.addfriend', ['title' => $title]);
+    }
+
+    public function searchFriend(Request $request)
+    {
+        $title = "Add friend";
+        $authUser = auth()->user();
+        $username = $request->username;
+
+        $friend = null;
+        
+        if ($username) {
+            $friend = User::where('username', $username)
+                        ->where('id', '!=', $authUser->id)
+                        ->first();
+        }
+
+        return view('chat.addfriend', [
+            'title' => $title,
+            'friend' => $friend,
+        ]);
+    }
+
+    public function sendFriendRequest(Request $request)
+    {
+        $receiverId = $request->input('friend_id');
+        $senderId = Auth::id();
+
+        if ($receiverId == $senderId) {
+            return back()->with('error', 'Anda tidak dapat mengirim permintaan pertemanan ke diri sendiri.');
+        }
+
+        $receiver = User::find($receiverId);
+        if (!$receiver) {
+            return back()->with('error', 'Pengguna tidak ditemukan.');
+        }
+
+        $alreadyFriend = Friend::where(function($q) use ($senderId, $receiverId) {
+            $q->where('user_id', $senderId)->where('friend_id', $receiverId);
+        })->orWhere(function($q) use ($senderId, $receiverId) {
+            $q->where('user_id', $receiverId)->where('friend_id', $senderId);
+        })->exists();
+
+        if ($alreadyFriend) {
+            return back()->with('error', 'Kalian sudah berteman.');
+        }
+
+        $existingRequest = FriendRequest::where(function($q) use ($senderId, $receiverId) {
+            $q->where('sender_id', $senderId)
+            ->where('receiver_id', $receiverId)
+            ->where('status', 'pending');
+        })->orWhere(function($q) use ($senderId, $receiverId) {
+            $q->where('sender_id', $receiverId)
+            ->where('receiver_id', $senderId)
+            ->where('status', 'pending');
+        })->first();
+
+        if ($existingRequest) {
+            return back()->with('error', 'Permintaan pertemanan sudah dikirim.');
+        }
+
+        FriendRequest::create([
+            'sender_id' => $senderId,
+            'receiver_id' => $receiverId,
+            'status' => 'pending'
+        ]);
+
+        return back()->with('success', 'Friend request already sent.');
     }
 
     public function conversations()
