@@ -32,7 +32,9 @@
                         @csrf
                         <input type="hidden" name="friend_id" value="{{ $friend->id }}">
                         @if (session('success'))
-                        <button type="submit" class="add-friend-btn" disabled>{{ session('success') }} <i class="fa-solid fa-user-check"></i></button>
+                            <button type="submit" class="add-friend-btn --disabled" disabled>{{ session('success') }} <i class="fa-solid fa-user-check"></i></button>
+                        @elseif (session('error'))
+                            <button type="submit" class="add-friend-btn --disabled" disabled>{{ session('error') }} <i class="fa-solid fa-user-check"></i></button>
                         @else
                         <button type="submit" class="add-friend-btn">Add friend</button>
                         @endif
