@@ -15,13 +15,15 @@
     </div>
 
     <div class="sidebar-left-navbar">
-        <a href="/chat/friends"><i class="fa-solid icon-left-navbar fa-address-book"></i></a>
-        <a href="/chat/addfriend"><i class="fa-solid icon-left-navbar fa-user-plus"></i></a>
-        <a href="/chat/conversations"><i class="fa-solid icon-left-navbar fa-comment"></i></a>
+        <a href="/chat/friends"><i class="fa-solid icon-left-navbar fa-address-book" title="Friends"></i></a>
+        <a href="/chat/conversations"><i class="fa-solid fa-comments"></i><i class="fa-solid icon-left-navbar fa-comment" title="Conversation"></i></a>
     </div>
 
     <ul>
         @if ($mode === "friends")
+        <div class="sidebar-content">
+            <span class="sidebar-content-title">Friends</span>
+        </div>
             @foreach ($dataset as $friend)
             <li>
                 <a href="/chat/p/{{ $friend['username'] }}">
@@ -42,7 +44,9 @@
             @endforeach
 
         @elseif ($mode === "conversation")
-            <p>this is conversation mode</p>
+        <div class="sidebar-content">
+            <span class="sidebar-content-title">Conversations</span>
+        </div>
 
         @elseif ($mode === "default")
         @endif

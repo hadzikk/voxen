@@ -113,18 +113,39 @@ class ChatController extends Controller
         $username = $request->username;
 
         $friend = null;
-        
+        $isFriend = false;
+        $isPendingRequest = false;
+
         if ($username) {
             $friend = User::where('username', $username)
                         ->where('id', '!=', $authUser->id)
                         ->first();
+
+            if ($friend) {
+                // Cek apakah sudah berteman
+                $isFriend = Friend::where(function($q) use ($authUser, $friend) {
+                    $q->where('user_id', $authUser->id)->where('friend_id', $friend->id);
+                })->orWhere(function($q) use ($authUser, $friend) {
+                    $q->where('user_id', $friend->id)->where('friend_id', $authUser->id);
+                })->exists();
+
+                // Cek apakah ada request pending
+                $isPendingRequest = FriendRequest::where(function($q) use ($authUser, $friend) {
+                    $q->where('sender_id', $authUser->id)->where('receiver_id', $friend->id);
+                })->orWhere(function($q) use ($authUser, $friend) {
+                    $q->where('sender_id', $friend->id)->where('receiver_id', $authUser->id);
+                })->where('status', 'pending')->exists();
+            }
         }
 
         return view('chat.addfriend', [
             'title' => $title,
             'friend' => $friend,
+            'isFriend' => $isFriend,
+            'isPendingRequest' => $isPendingRequest,
         ]);
     }
+
 
     public function sendFriendRequest(Request $request)
     {
@@ -132,12 +153,12 @@ class ChatController extends Controller
         $senderId = Auth::id();
 
         if ($receiverId == $senderId) {
-            return back()->with('error', 'Anda tidak dapat mengirim permintaan pertemanan ke diri sendiri.');
+            return back()->with('error', 'You can\'t send a friend request to yourself.');
         }
 
         $receiver = User::find($receiverId);
         if (!$receiver) {
-            return back()->with('error', 'Pengguna tidak ditemukan.');
+            return back()->with('error', 'User not found.');
         }
 
         $alreadyFriend = Friend::where(function($q) use ($senderId, $receiverId) {
@@ -147,7 +168,7 @@ class ChatController extends Controller
         })->exists();
 
         if ($alreadyFriend) {
-            return back()->with('error', 'Kalian sudah berteman.');
+            return back()->with('error', 'You`re has been friends.');
         }
 
         $existingRequest = FriendRequest::where(function($q) use ($senderId, $receiverId) {
@@ -161,7 +182,7 @@ class ChatController extends Controller
         })->first();
 
         if ($existingRequest) {
-            return back()->with('error', 'Permintaan pertemanan sudah dikirim.');
+            return back()->with('error', 'Friend request already sent.');
         }
 
         FriendRequest::create([

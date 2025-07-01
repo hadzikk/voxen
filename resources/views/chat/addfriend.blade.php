@@ -31,13 +31,14 @@
                     <form action="/chat/addfriend" method="post">
                         @csrf
                         <input type="hidden" name="friend_id" value="{{ $friend->id }}">
-                        @if (session('success'))
-                            <button type="submit" class="add-friend-btn --disabled" disabled>{{ session('success') }} <i class="fa-solid fa-user-check"></i></button>
-                        @elseif (session('error'))
-                            <button type="submit" class="add-friend-btn --disabled" disabled>{{ session('error') }} <i class="fa-solid fa-user-check"></i></button>
+                        @if ($isFriend)
+                            <button type="button" class="add-friend-btn --disabled" disabled>Already Friends <i class="fa-solid fa-user-check"></i></button>
+                        @elseif ($isPendingRequest)
+                            <button type="button" class="add-friend-btn --disabled" disabled>Request Pending <i class="fa-solid fa-hourglass-half"></i></button>
                         @else
-                        <button type="submit" class="add-friend-btn">Add friend</button>
+                            <button type="submit" class="add-friend-btn">Add friend</button>
                         @endif
+
                     </form>
                 </div>
                 @else
