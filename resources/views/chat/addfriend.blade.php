@@ -38,17 +38,16 @@
                                 <input type="hidden" name="friend_id" value="{{ $friend->id }}">
                                 
                                 @if ($isFriend)
-                                    <button type="button" class="add-friend-btn --disabled" disabled>
-                                        Already friends.
-                                    </button>
-                                @elseif ($isPendingRequest)
-                                    <button type="button" class="add-friend-btn --disabled" disabled>
-                                        Request has been sent.
-                                    </button>
+                                    <button type="button" class="add-friend-btn --disabled" disabled>Already friends.</button>
+                                @elseif ($isReceivedRequest)
+                                    <form action="/chat/friendrequest/{{ $friend->id }}/accept" method="POST">
+                                        @csrf
+                                        <button type="submit" class="add-friend-btn">Accept request</button>
+                                    </form>
+                                @elseif ($isSentRequest)
+                                    <button type="button" class="add-friend-btn --disabled" disabled>Request has sent.</button>
                                 @else
-                                    <button type="submit" class="add-friend-btn">
-                                        Add friend
-                                    </button>
+                                    <button type="submit" class="add-friend-btn">Add friend</button>
                                 @endif
                             </form>
                         </div>

@@ -171,38 +171,62 @@ class ChatController extends Controller
 
     public function searchFriend(Request $request)
     {
-        $username = $request->input('username');
-        $title = 'Add Friend';
+        $title = "Add friend";
+        $authUser = auth()->user();
+        $username = $request->username;
 
-        $friend = User::where('username', $username)
-            ->where('id', '!=', Auth::id())
-            ->first();
-
+        $friend = null;
         $isFriend = false;
-        $isPendingRequest = false;
-        $isIncomingRequest = false;
+        $isSentRequest = false;
+        $isReceivedRequest = false;
 
-        if ($friend) {
-            $isFriend = Auth::user()->isFriendWith($friend->id);
-            $isPendingRequest = FriendRequest::where('sender_id', Auth::id())
-                                ->where('receiver_id', $friend->id)
-                                ->exists();
+        if ($username) {
+            $friend = User::where('username', $username)
+                        ->where('id', '!=', $authUser->id)
+                        ->first();
 
-            $isIncomingRequest = FriendRequest::where('sender_id', $friend->id)
-                                ->where('receiver_id', Auth::id())
-                                ->exists();
+            if ($friend) {
+                // Cek apakah sudah berteman
+                $isFriend = Friend::where(function($q) use ($authUser, $friend) {
+                    $q->where('user_id', $authUser->id)->where('friend_id', $friend->id);
+                })->orWhere(function($q) use ($authUser, $friend) {
+                    $q->where('user_id', $friend->id)->where('friend_id', $authUser->id);
+                })->exists();
+
+                // Cek apakah user login sudah mengirim request ke $friend
+                $isSentRequest = FriendRequest::where('sender_id', $authUser->id)
+                                    ->where('receiver_id', $friend->id)
+                                    ->where('status', 'pending')
+                                    ->exists();
+
+                // Cek apakah user login menerima request dari $friend
+                $isReceivedRequest = FriendRequest::where('sender_id', $friend->id)
+                                        ->where('receiver_id', $authUser->id)
+                                        ->where('status', 'pending')
+                                        ->exists();
+            }
         }
+
+        return view('chat.addfriend', [
+            'title' => $title,
+            'friend' => $friend,
+            'isFriend' => $isFriend,
+            'isSentRequest' => $isSentRequest,
+            'isReceivedRequest' => $isReceivedRequest,
+        ]);
+    }
+
 
 
         return view('chat.addfriend', compact(
-    'title',
-    'friend',
-    'isFriend',
-    'isPendingRequest',
-    'isIncomingRequest'
-));
-
+            'title',
+            'friend',
+            'isFriend',
+            'isPendingRequest',
+            'isIncomingRequest'
+        ));
     }
+
     public function conversations()
     {
         $title = "Chat";
@@ -213,4 +237,52 @@ class ChatController extends Controller
             'conversations' => $conversations,
         ]);
     }
+
+    public function sendFriendRequest(Request $request)
+    {
+        $receiverId = $request->input('friend_id');
+        $senderId = Auth::id();
+
+        if ($receiverId == $senderId) {
+            return back()->with('error', 'You can\'t send a friend request to yourself.');
+        }
+
+        $receiver = User::find($receiverId);
+        if (!$receiver) {
+            return back()->with('error', 'User not found.');
+        }
+
+        $alreadyFriend = Friend::where(function($q) use ($senderId, $receiverId) {
+            $q->where('user_id', $senderId)->where('friend_id', $receiverId);
+        })->orWhere(function($q) use ($senderId, $receiverId) {
+            $q->where('user_id', $receiverId)->where('friend_id', $senderId);
+        })->exists();
+
+        if ($alreadyFriend) {
+            return back()->with('error', 'Youre has been friends.');
+        }
+
+        $existingRequest = FriendRequest::where(function($q) use ($senderId, $receiverId) {
+            $q->where('sender_id', $senderId)
+            ->where('receiver_id', $receiverId)
+            ->where('status', 'pending');
+        })->orWhere(function($q) use ($senderId, $receiverId) {
+            $q->where('sender_id', $receiverId)
+            ->where('receiver_id', $senderId)
+            ->where('status', 'pending');
+        })->first();
+
+        if ($existingRequest) {
+            return back()->with('error', 'Friend request already sent.');
+        }
+
+        FriendRequest::create([
+            'sender_id' => $senderId,
+            'receiver_id' => $receiverId,
+            'status' => 'pending'
+        ]);
+
+        return back()->with('success', 'Friend request already sent.');
+    }
+
 }
