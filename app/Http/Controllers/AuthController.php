@@ -37,7 +37,7 @@ class AuthController extends Controller
             'password'   => 'required|string|min:8',
         ]);
 
-        User::create([
+        $user = User::create([
             'username'  => $validated['username'],
             'firstname' => $validated['firstname'],
             'lastname'  => $validated['lastname'],
@@ -45,8 +45,14 @@ class AuthController extends Controller
             'password'  => Hash::make($validated['password']),
         ]);
 
-        return view('auth.signin', [
-            'title' => 'Sign In',
+        $registered = Auth::login($user);
+
+        if ($registered) {
+            return redirect('chat.index');
+        }
+
+        return view('chat.index', [
+            'title' => 'Chat',
         ]);
     }
 

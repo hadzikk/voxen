@@ -68,6 +68,7 @@ body {
             padding: 4px;
             display: flex;
             justify-content: end;
+            align-items: center;
             
             .icon-left-navbar {
                 padding: 0 5px;
@@ -84,10 +85,18 @@ body {
 
             .sidebar-content {
                 padding: 5px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
 
                 .sidebar-content-title {
                     font-weight: 600;
                     padding: 5px 10px 5px 0;
+                }
+
+                .sidebar-content-feature {
+                    font-size: small;
+                    text-decoration: none;
                 }
 
                 .sidebar-content-nav {
@@ -141,6 +150,15 @@ body {
                         }
 
                         .contact-additional-info {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+
+                            .contact-request {
+                                display: flex;
+                                gap: 10px;
+                            }
+
                             .contact-last-chat {
                                 font-size: small;
                                 color: #EEEEEE;

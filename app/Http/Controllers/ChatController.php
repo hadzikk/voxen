@@ -91,12 +91,75 @@ class ChatController extends Controller
     public function friends()
     {
         $title = "Chat";
-        $friends = User::all();
+        $user = Auth::user();
+        $friends = $user->allFriends()->map(function ($f) {
+        return $f->friend_id === Auth::id() ? $f->user : $f->friend;
+        });
 
         return view('chat.friends', [
             'title' => $title,
             'friends' => $friends,
         ]);
+    }
+
+    public function friendrequest()
+    {
+        $title = "Chat";
+        $user = Auth::user();
+        $requests = $user->received_friend_requests()->with('sender')->get();
+
+        return view('chat.friendrequest', [
+            'title' => $title,
+            'requests' => $requests,
+        ]);
+    }
+
+    public function accept($id)
+    {
+        $request = FriendRequest::findOrFail($id);
+
+        if ($request->receiver_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $exists = Friend::where(function ($query) use ($request) {
+            $query->where('user_id', Auth::id())
+                ->where('friend_id', $request->sender_id);
+        })->orWhere(function ($query) use ($request) {
+            $query->where('user_id', $request->sender_id)
+                ->where('friend_id', Auth::id());
+        })->exists();
+
+        if (!$exists) {
+            Friend::create([
+                'user_id' => Auth::id(),
+                'friend_id' => $request->sender_id,
+            ]);
+
+            Friend::create([
+                'user_id' => $request->sender_id,
+                'friend_id' => Auth::id(),
+            ]);
+        }
+
+        $request->delete();
+
+        return redirect('/chat/friendrequest')->with('success', 'Friend request accepted.');
+    }
+
+
+    public function decline($id)
+    {
+        $request = FriendRequest::findOrFail($id);
+
+        if ($request->receiver_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $request->delete();
+
+        return redirect('/chat/friendrequest')->with('success', 'Friend request declined.');
+
     }
 
     public function addFriend()
@@ -108,92 +171,38 @@ class ChatController extends Controller
 
     public function searchFriend(Request $request)
     {
-        $title = "Add friend";
-        $authUser = auth()->user();
-        $username = $request->username;
+        $username = $request->input('username');
+        $title = 'Add Friend';
 
-        $friend = null;
+        $friend = User::where('username', $username)
+            ->where('id', '!=', Auth::id())
+            ->first();
+
         $isFriend = false;
         $isPendingRequest = false;
+        $isIncomingRequest = false;
 
-        if ($username) {
-            $friend = User::where('username', $username)
-                        ->where('id', '!=', $authUser->id)
-                        ->first();
+        if ($friend) {
+            $isFriend = Auth::user()->isFriendWith($friend->id);
+            $isPendingRequest = FriendRequest::where('sender_id', Auth::id())
+                                ->where('receiver_id', $friend->id)
+                                ->exists();
 
-            if ($friend) {
-                // Cek apakah sudah berteman
-                $isFriend = Friend::where(function($q) use ($authUser, $friend) {
-                    $q->where('user_id', $authUser->id)->where('friend_id', $friend->id);
-                })->orWhere(function($q) use ($authUser, $friend) {
-                    $q->where('user_id', $friend->id)->where('friend_id', $authUser->id);
-                })->exists();
-
-                // Cek apakah ada request pending
-                $isPendingRequest = FriendRequest::where(function($q) use ($authUser, $friend) {
-                    $q->where('sender_id', $authUser->id)->where('receiver_id', $friend->id);
-                })->orWhere(function($q) use ($authUser, $friend) {
-                    $q->where('sender_id', $friend->id)->where('receiver_id', $authUser->id);
-                })->where('status', 'pending')->exists();
-            }
+            $isIncomingRequest = FriendRequest::where('sender_id', $friend->id)
+                                ->where('receiver_id', Auth::id())
+                                ->exists();
         }
 
-        return view('chat.addfriend', [
-            'title' => $title,
-            'friend' => $friend,
-            'isFriend' => $isFriend,
-            'isPendingRequest' => $isPendingRequest,
-        ]);
+
+        return view('chat.addfriend', compact(
+    'title',
+    'friend',
+    'isFriend',
+    'isPendingRequest',
+    'isIncomingRequest'
+));
+
     }
-
-
-    public function sendFriendRequest(Request $request)
-    {
-        $receiverId = $request->input('friend_id');
-        $senderId = Auth::id();
-
-        if ($receiverId == $senderId) {
-            return back()->with('error', 'You can\'t send a friend request to yourself.');
-        }
-
-        $receiver = User::find($receiverId);
-        if (!$receiver) {
-            return back()->with('error', 'User not found.');
-        }
-
-        $alreadyFriend = Friend::where(function($q) use ($senderId, $receiverId) {
-            $q->where('user_id', $senderId)->where('friend_id', $receiverId);
-        })->orWhere(function($q) use ($senderId, $receiverId) {
-            $q->where('user_id', $receiverId)->where('friend_id', $senderId);
-        })->exists();
-
-        if ($alreadyFriend) {
-            return back()->with('error', 'You`re has been friends.');
-        }
-
-        $existingRequest = FriendRequest::where(function($q) use ($senderId, $receiverId) {
-            $q->where('sender_id', $senderId)
-            ->where('receiver_id', $receiverId)
-            ->where('status', 'pending');
-        })->orWhere(function($q) use ($senderId, $receiverId) {
-            $q->where('sender_id', $receiverId)
-            ->where('receiver_id', $senderId)
-            ->where('status', 'pending');
-        })->first();
-
-        if ($existingRequest) {
-            return back()->with('error', 'Friend request already sent.');
-        }
-
-        FriendRequest::create([
-            'sender_id' => $senderId,
-            'receiver_id' => $receiverId,
-            'status' => 'pending'
-        ]);
-
-        return back()->with('success', 'Friend request already sent.');
-    }
-
     public function conversations()
     {
         $title = "Chat";
