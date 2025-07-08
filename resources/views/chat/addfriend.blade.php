@@ -33,23 +33,30 @@
                                     class="add-friend-picture">
                             </figure>
                             <p class="add-friend-username">{{ $friend->username }}</p>
+                            @if ($isReceivedRequest)
+                                @if ($isFriend)
+                                    <button type="button" class="add-friend-btn --disabled" disabled>Already friends.</button>
+                                @else
+                                <form action="/chat/friendrequest/{{ $friend->id }}/accept/onsearch" method="POST">
+                                    @csrf
+                                     <input type="hidden" name="username" value="{{ $friend->username }}">
+                                     <button type="submit" class="add-friend-btn">Accept request</button>
+                                </form>
+                                @endif
+                            @else
                             <form action="/chat/addfriend" method="post">
                                 @csrf
                                 <input type="hidden" name="friend_id" value="{{ $friend->id }}">
                                 
                                 @if ($isFriend)
                                     <button type="button" class="add-friend-btn --disabled" disabled>Already friends.</button>
-                                @elseif ($isReceivedRequest)
-                                    <form action="/chat/friendrequest/{{ $friend->id }}/accept" method="POST">
-                                        @csrf
-                                        <button type="submit" class="add-friend-btn">Accept request</button>
-                                    </form>
                                 @elseif ($isSentRequest)
                                     <button type="button" class="add-friend-btn --disabled" disabled>Request has sent.</button>
                                 @else
                                     <button type="submit" class="add-friend-btn">Add friend</button>
                                 @endif
                             </form>
+                            @endif
                         </div>
                     @else
                         <p style="text-align: center; margin-top: 20px; font-size: small;">

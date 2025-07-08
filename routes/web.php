@@ -17,7 +17,8 @@ Route::get('/chat/friends', [ChatController::class, 'friends'])->middleware('aut
 Route::get('/chat/friends/s', [ChatController::class, 'searchFriend'])->middleware('auth');
 Route::get('/chat/conversations', [ChatController::class, 'conversations'])->middleware('auth');
 Route::get('/chat/friendrequest', [ChatController::class, 'friendrequest'])->middleware('auth');
-Route::post('/chat/friendrequest/{id}/accept', [ChatController::class, 'accept']);
-Route::post('/chat/friendrequest/{id}/decline', [ChatController::class, 'decline']);
+Route::post('/chat/friendrequest/{id}/accept', [ChatController::class, 'accept'])->middleware('auth');
+Route::post('/chat/friendrequest/{id}/accept/onsearch', [ChatController::class, 'acceptFromSearch'])->middleware('auth');
+Route::post('/chat/friendrequest/{id}/decline', [ChatController::class, 'decline'])->middleware('auth');
 
 

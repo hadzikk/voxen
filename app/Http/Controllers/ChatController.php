@@ -147,6 +147,44 @@ class ChatController extends Controller
         return redirect('/chat/friendrequest')->with('success', 'Friend request accepted.');
     }
 
+    public function acceptFromSearch($sender_id, Request $request)
+    {
+        $authId = Auth::id();
+        
+        $friendRequest = FriendRequest::where('sender_id', $sender_id)
+            ->where('receiver_id', $authId)
+            ->first();
+
+        if (!$friendRequest) {
+            return redirect()->back()->with('error', 'Friend request not found.');
+        }
+
+        // Cek apakah sudah berteman
+        $alreadyFriends = Friend::where(function ($query) use ($authId, $sender_id) {
+            $query->where('user_id', $authId)
+                ->where('friend_id', $sender_id);
+        })->orWhere(function ($query) use ($authId, $sender_id) {
+            $query->where('user_id', $sender_id)
+                ->where('friend_id', $authId);
+        })->exists();
+
+        if (!$alreadyFriends) {
+            Friend::create([
+                'user_id' => $authId,
+                'friend_id' => $sender_id,
+            ]);
+
+            Friend::create([
+                'user_id' => $sender_id,
+                'friend_id' => $authId,
+            ]);
+        }
+
+        $friendRequest->delete();
+
+        return redirect('/chat/friends/s?username=' . $request->username)->with('success', 'Friend request accepted.');
+    }
+
 
     public function decline($id)
     {
@@ -214,17 +252,6 @@ class ChatController extends Controller
             'isSentRequest' => $isSentRequest,
             'isReceivedRequest' => $isReceivedRequest,
         ]);
-    }
-
-
-
-        return view('chat.addfriend', compact(
-            'title',
-            'friend',
-            'isFriend',
-            'isPendingRequest',
-            'isIncomingRequest'
-        ));
     }
 
     public function conversations()

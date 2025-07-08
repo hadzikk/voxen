@@ -5,6 +5,7 @@
     </x-slot:styles>
 
     <div class="chat-container">
+        <x-chat.popup-create-group />
         <x-chat.sidebar-left :dataset="$conversations" mode="conversation" />
         <x-chat.main />
         <x-chat.sidebar-right />

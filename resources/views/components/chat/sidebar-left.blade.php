@@ -57,6 +57,7 @@
         @elseif ($mode === "conversation")
             <div class="sidebar-content">
                 <span class="sidebar-content-title">Conversations</span>
+                <a href="" class="sidebar-content-feature">create group</a>
             </div>
 
         @elseif ($mode === "default")
