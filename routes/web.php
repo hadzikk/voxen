@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\GroupController;
 
 Route::get('/auth/signin', [AuthController::class, 'signin'])->name('signin');
 Route::post('/auth/verify', [AuthController::class, 'verify']);
@@ -20,5 +21,7 @@ Route::get('/chat/friendrequest', [ChatController::class, 'friendrequest'])->mid
 Route::post('/chat/friendrequest/{id}/accept', [ChatController::class, 'accept'])->middleware('auth');
 Route::post('/chat/friendrequest/{id}/accept/onsearch', [ChatController::class, 'acceptFromSearch'])->middleware('auth');
 Route::post('/chat/friendrequest/{id}/decline', [ChatController::class, 'decline'])->middleware('auth');
+
+Route::post('/group/create', [GroupController::class, 'store'])->middleware('auth');
 
 
