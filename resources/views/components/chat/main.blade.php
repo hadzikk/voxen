@@ -10,7 +10,10 @@
                 alt="" 
                 class="chat-main-picture">
             </figure>
-            <p class="chat-main-group-name">{{ Str::limit($group->name, 20, '...') }}</p>
+            <div>
+                <p class="chat-main-group-name">{{ Str::limit($group->name, 20, '...') }}</p>
+                <p class="chat-main-group-label">Group</p>
+            </div>
         </div>
     </div>
     @else
@@ -19,4 +22,19 @@
         <h1 class="conversation-title">choose a chat and start the conversation</h1>
     </div>
     @endif
+
+    <div class="chat-main-conversation">
+        <div class="chat-main-bubble">
+            <figure class="chat-main-bubble-picture-container">
+                <img 
+                    src="{{ asset('images/Deafult PFP _ @davy3k.jpg') }}" 
+                    alt="" 
+                    class="chat-main-bubble-picture">
+            </figure>
+            <div class="chat-main-bubble-content">
+                <p class="chat-main-bubble-username">You <span class="chat-main-bubble-time">15:47</span></p>
+                <p class="chat-main-bubble-message">{{ $group->description }}</p>
+            </div>
+        </div>
+    </div>
 </div>
