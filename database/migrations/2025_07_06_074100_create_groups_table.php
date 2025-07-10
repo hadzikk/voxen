@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('groups', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('group_picture');
-            $table->text('description');
             $table->foreignId('owner_id')->constrained('users')->onDelete('cascade');
+            $table->string('name');
+            $table->string('profile_picture')->nullable();
+            $table->string('slug')->unique();
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }

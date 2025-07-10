@@ -13,9 +13,12 @@ return new class extends Migration
     {
         Schema::create('group_users', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('group_id')->constrained('groups')->onDelete('cascade');
+            $table->foreignId('group_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->enum('status', ['invited', 'accepted', 'rejected'])->default('invited');
+            $table->string('role')->nullable();
             $table->timestamps();
+
             $table->unique(['group_id', 'user_id']);
         });
     }

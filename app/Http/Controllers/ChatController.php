@@ -57,6 +57,7 @@ class ChatController extends Controller
             'title' => $title,
         ]); 
     }
+    
     public function person($username)
     {
         $friends = User::all();
@@ -257,7 +258,10 @@ class ChatController extends Controller
     public function conversations()
     {
         $title = "Chat";
-        $conversations = [];
+
+        $user = auth()->user();
+
+        $conversations = $user->groups()->with('users')->get();
 
         return view('chat.group', [
             'title' => $title,

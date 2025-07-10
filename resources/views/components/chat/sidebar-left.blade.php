@@ -55,10 +55,36 @@
             @endforeach
 
         @elseif ($mode === "conversation")
-            <div class="sidebar-content">
-                <span class="sidebar-content-title">Conversations</span>
-                <a href="" class="sidebar-content-feature">create group</a>
-            </div>
+        <div class="sidebar-content">
+            <span class="sidebar-content-title">Conversations</span>
+            <a href="#" class="sidebar-content-feature" onclick="popupCreateGroup()">create group</a>
+        </div>
+
+        @forelse ($dataset as $group)
+            <li>
+                <a href="/chat/g/{{ $group->slug }}">
+                    <figure class="contact-picture-container">
+                        <img
+                            src="{{ $group->profile_picture ? asset('storage/' . $group->profile_picture) : asset('images/default_group_profile.jpg') }}"
+                            alt="" 
+                            class="contact-picture"
+                        >
+                    </figure>
+                    <div class="contact-info-container">
+                        <div class="contact-info">
+                            <p class="contact-name">{{ Str::limit($group->name, 20, '...') }}</p>
+                            <p class="time"></p>
+                        </div>
+                        <div class="contact-additional-info">
+                            <p class="contact-last-chat">You: {{ Str::limit($group->description, 26, '...') }}</p>  
+                        </div>
+                    </div>
+                </a>
+            </li>
+        @empty
+            <li><p class="text-gray-500 text-sm px-4">No groups yet.</p></li>
+        @endforelse
+
 
         @elseif ($mode === "default")
             {{-- Kosongkan atau isi sesuai kebutuhan --}}

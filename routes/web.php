@@ -23,5 +23,6 @@ Route::post('/chat/friendrequest/{id}/accept/onsearch', [ChatController::class, 
 Route::post('/chat/friendrequest/{id}/decline', [ChatController::class, 'decline'])->middleware('auth');
 
 Route::post('/group/create', [GroupController::class, 'store'])->middleware('auth');
+Route::get('/chat/g/{slug}', [GroupController::class, 'groupChat'])->middleware('auth');
 
 

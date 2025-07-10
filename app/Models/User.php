@@ -87,4 +87,12 @@ class User extends Authenticatable
             ->where('status', 'pending')
             ->exists();
     }
+
+    public function groups()
+    {
+        return $this->belongsToMany(Group::class, 'group_users')
+            ->withPivot('status', 'role')
+            ->withTimestamps();
+    }
+
 }
