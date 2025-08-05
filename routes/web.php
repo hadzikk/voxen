@@ -1,28 +1,29 @@
 <?php
 
+use App\Http\Controllers\FriendController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\GroupController;
 
-Route::get('/auth/signin', [AuthController::class, 'signin'])->name('signin');
-Route::post('/auth/verify', [AuthController::class, 'verify']);
-Route::get('/auth/signup', [AuthController::class, 'signup']);
-Route::post('/auth/signup',  [AuthController::class, 'store']);
+Route::get('/signin', [AuthController::class, 'signin'])->name('signin');
+Route::post('/signin', [AuthController::class, 'verifyCredentials'])->name('signin.submit');
+Route::get('/signup', [AuthController::class, 'signup'])->name('signup');
+Route::post('/signup', [AuthController::class, 'store'])->name('signup.submit');
 
-Route::get('/chat', [ChatController::class, 'index'])->middleware('auth');
-Route::get('/chat/p/{username}', [ChatController::class, 'group'])->middleware('auth');
-Route::get('/chat/addfriend', [ChatController::class, 'addFriend'])->middleware('auth');
-Route::post('/chat/addfriend', [ChatController::class, 'sendFriendRequest'])->middleware('auth');
-Route::get('/chat/friends', [ChatController::class, 'friends'])->middleware('auth');
-Route::get('/chat/friends/s', [ChatController::class, 'searchFriend'])->middleware('auth');
-Route::get('/chat/conversations', [ChatController::class, 'conversations'])->middleware('auth');
-Route::get('/chat/friendrequest', [ChatController::class, 'friendrequest'])->middleware('auth');
-Route::post('/chat/friendrequest/{id}/accept', [ChatController::class, 'accept'])->middleware('auth');
-Route::post('/chat/friendrequest/{id}/accept/onsearch', [ChatController::class, 'acceptFromSearch'])->middleware('auth');
-Route::post('/chat/friendrequest/{id}/decline', [ChatController::class, 'decline'])->middleware('auth');
+Route::get('/chat', [ChatController::class, 'index'])->middleware('auth')->name('chat.index');
 
-Route::post('/group/create', [GroupController::class, 'store'])->middleware('auth');
-Route::get('/chat/g/{slug}', [GroupController::class, 'groupChat'])->middleware('auth');
+Route::get('/friends', [FriendController::class, 'friendsList'])->middleware('auth')->name('friends.list');
 
+Route::get('/friends/search', [FriendController::class, 'searchFriend'])->middleware('auth')->name('friends.search');
+Route::get('/friends/add', [FriendController::class, 'addFriend'])->middleware('auth')->name('friends.add');
 
+Route::post('/friends/add', [FriendController::class, 'sendFriendRequest'])->middleware('auth')->name('friends.request.send');
+Route::get('/friends/requests', [FriendController::class, 'friendsRequestsList'])->middleware('auth')->name('friends.requests.list');
+Route::post('/friends/requests/{id}/accept', [FriendController::class, 'acceptFriendRequest'])->middleware('auth')->name('friends.requests.accept');
+Route::post('/friends/requests/{id}/accept/search', [FriendController::class, 'acceptFromSearch'])->middleware('auth')->name('friends.requests.accept.search');
+Route::post('/friends/requests/{id}/decline', [FriendController::class, 'declineFriendRequest'])->middleware('auth')->name('friends.requests.decline');
+
+Route::get('/groups', [GroupController::class, 'index'])->middleware('auth')->name('groups.index');
+Route::post('/groups', [GroupController::class, 'store'])->middleware('auth')->name('groups.create');
+Route::get('/groups/{slug}', [GroupController::class, 'groupRoomChat'])->middleware('auth')->name('groups.chat');

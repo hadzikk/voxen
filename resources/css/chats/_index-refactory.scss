@@ -22,15 +22,6 @@ body {
         overflow-y: auto;
         padding: 20px;
 
-        .greeting-user {
-            margin: 0 0 10px 0;
-            font-size: 1.5rem;
-
-            .user-fullname {
-                text-transform: capitalize;
-            }
-        }
-
         .profile-user {
             width: 100%;
             height: fit-content;
@@ -97,6 +88,7 @@ body {
                 .sidebar-content-feature {
                     font-size: small;
                     text-decoration: none;
+                    cursor: pointer;
                 }
 
                 .sidebar-content-nav {
@@ -198,8 +190,6 @@ body {
         overflow-y: auto;
 
         .chat-main-conversation {
-            width: 100%;
-            padding: 20px;
 
             .chat-main-bubble {
                 width: fit-content;

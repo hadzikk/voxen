@@ -1,11 +1,5 @@
-import './bootstrap';
-
-document.addEventListener('DOMContentLoaded', () => {
-    window.Echo.channel('chat')
-        .listen('.message.sent', (e) => {
-            const bubbleChat = document.getElementById('bubble-chat');
-            if (bubbleChat) {
-                bubbleChat.textContent = e.message;
-            }
-        });
-});
+import './auth/auth';
+import './chats/index';
+import './groups/popup-create-group';
+import './groups/popup-invite-friend';
+import axios from 'axios';

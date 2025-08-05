@@ -1,0 +1,10 @@
+// global rules
+@use './base/base';
+
+// page
+@use './page/chat';
+
+// layouts
+@use './layouts/sidebar-left';
+@use '../chats/layouts/chat-main';
+@use '../chats/layouts/sidebar_right';

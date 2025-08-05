@@ -1,16 +1,11 @@
 <x-app.layout :title="$title">
-    <x-slot:styles>
-        <link rel="stylesheet" href="{{ asset('css/chat/addfriend.scss') }}">
-        <link rel="stylesheet" href="{{ asset('css/chat/main.scss') }}">
-    </x-slot:styles>
-
     <nav class="navbar">
-        <a href="/chat/friendrequest"><i class="fa-solid fa-arrow-left"></i></a>
+        <a href="{{ route('friends.requests.list') }}"><i class="fa-solid fa-arrow-left"></i></a>
     </nav>
 
     <div class="add-friend-container">
         <div class="add-friend-content">
-            <form action="/chat/friends/s" method="get">
+            <form action="{{ route('friends.search') }}" method="get">
                 <div class="input-container">
                     <i class="fa-solid fa-user-plus"></i>
                     <input 
@@ -44,7 +39,7 @@
                                 </form>
                                 @endif
                             @else
-                            <form action="/chat/addfriend" method="post">
+                            <form action="{{ route('friends.request.send') }}" method="post">
                                 @csrf
                                 <input type="hidden" name="friend_id" value="{{ $friend->id }}">
                                 

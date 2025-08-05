@@ -1,0 +1,18 @@
+@use '../components/sidebar-left-navbar';
+@use '../components/sidebar-content';
+@use '../components/profile-user';
+@use '../components/sidebar-left-list-container';
+@use '../components/sidebar-left-list';
+@use '../components/sidebar-left-navigation';
+
+.sidebar-left {
+    position: relative;
+    width: 25%;
+    border-right: 1px solid #dddddd;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.sidebar-left::-webkit-scrollbar {
+    display: none;
+}

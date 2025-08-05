@@ -10,14 +10,14 @@
 
     <div class="container">
         <div class="card">
-            <form action="/auth/signup" method="POST">
+            <form action="{{ route('signup.submit') }}" method="POST">
                 @csrf
                 <h2 class="card-title">welcome back</h2>
                 <p class="card-greeting">hey <strong>user</strong>, please enter your details</p>
 
                 <div class="authenticate-select">
-                    <div class="signin-btn"><a href="/auth/signin">sign in</a></div>
-                    <div class="signup-btn --active"><a href="/auth/signup" class="--text-none">sign up</a></div>
+                    <div class="signin-btn"><a href="/signin">sign in</a></div>
+                    <div class="signup-btn --active"><a href="/signup" class="--text-none">sign up</a></div>
                 </div>
 
                 <div class="input-box">

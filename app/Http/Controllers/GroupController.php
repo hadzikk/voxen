@@ -6,9 +6,43 @@ use App\Models\Group;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use App\Models\Friend;
 
 class GroupController extends Controller
 {
+    public function index()
+    {
+        $user = Auth::user();
+
+        $ownedGroups = Group::where('owner_id', $user->id)->get();
+
+        $joinedGroups = $user->groups()->get();
+
+        $groups = $ownedGroups->merge($joinedGroups)->unique('id')->values();
+
+        $alreadyFriends = $user->allFriends()->map(fn($friendship) => 
+            $friendship->friend_id === $user->id ? $friendship->user : $friendship->friend
+        );
+
+        return view('groups.index', [
+            'title' => 'Groups',
+            'groups' => $groups,
+            'friends' => $alreadyFriends,
+        ]);
+    }
+
+
+    public function groupRoomChat($slug)
+    {
+        $group = Group::where('slug', $slug)->firstOrFail();
+    
+        return view('groups.room-chat', [
+            'group' => $group,
+            'title' => $group->name,
+            'conversations' => auth()->user()->groups()->with('users')->get(),
+        ]);
+    }
+
     public function store(Request $request)
     {
         $validated = $this->validateGroup($request);
@@ -20,16 +54,6 @@ class GroupController extends Controller
         return redirect()->back()->with('success', 'Grup berhasil dibuat!');
     }
 
-    public function groupChat($slug)
-    {
-        $group = Group::where('slug', $slug)->firstOrFail();
-
-        return view('chat.groupchat', [
-            'group' => $group,
-            'title' => $group->name,
-            'conversations' => auth()->user()->groups()->with('users')->get(),
-        ]);
-    }
 
     protected function validateGroup(Request $request): array
     {

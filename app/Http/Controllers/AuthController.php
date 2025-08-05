@@ -45,7 +45,7 @@ class AuthController extends Controller
 
         return redirect()
             ->route('chat.index')
-            ->with('success', 'Registration successful! Welcome.');
+            ->with('success', 'Registration successful! Welcome back.');
     }
 
     public function verifyCredentials(Request $request)
@@ -62,7 +62,7 @@ class AuthController extends Controller
         }
 
         return redirect()
-            ->route('chat.index')
-            ->with('success', 'Successful login! Welcome.');
+            ->route('signin.submit')
+            ->with('success', 'Successful login! Welcome back.');
     }
 }

@@ -1,0 +1,10 @@
+.sidebar-right {
+    width: 25%;
+    max-height: 100vh;
+    border-left: 1px solid #ddd;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

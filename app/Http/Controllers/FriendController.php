@@ -12,17 +12,17 @@ class FriendController extends Controller
     public function friendsList()
     {
         $user = auth()->user();
-        $friends = $user->allFriends()->map(fn($friendship) => 
+        $alreadyFriends = $user->allFriends()->map(fn($friendship) => 
             $friendship->friend_id === $user->id ? $friendship->user : $friendship->friend
         );
 
         return view('friends.list', [
             'title' => 'Friends',
-            'friends' => $friends,
+            'alreadyFriends' => $alreadyFriends,
         ]);
     }
 
-    public function friendRequests()
+    public function friendsRequestsList()
     {
         $user = auth()->user();
         $requests = $user->received_friend_requests()->with('sender')->get();
@@ -47,7 +47,7 @@ class FriendController extends Controller
 
         $request->delete();
 
-        return redirect()->route('friend.requests')->with('success', 'Friend request accepted.');
+        return redirect()->route('friends.requests.list')->with('success', 'Friend request accepted.');
     }
 
     public function acceptFromSearch($senderId, Request $request)
@@ -83,7 +83,7 @@ class FriendController extends Controller
 
         $request->delete();
 
-        return redirect()->route('friend.requests')->with('success', 'Friend request declined.');
+        return redirect()->route('friends.requests.list')->with('success', 'Friend request declined.');
     }
 
     public function addFriend()

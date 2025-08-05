@@ -1,0 +1,13 @@
+@mixin pcg-padding-and-margin-convention {
+    margin: 0 0 20px 0;
+    padding: 0 10%;
+}
+
+@mixin pcg-padding-left-right-convention {
+    padding: 0 10%;
+}
+
+@mixin pcg-label {
+    color: #000;
+    display: block;
+}

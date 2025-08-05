@@ -1,0 +1,22 @@
+.sidebar-content {
+    padding: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .sidebar-content-title {
+        font-weight: 600;
+        padding: 5px 10px 5px 0;
+    }
+
+    .sidebar-content-feature {
+        font-size: small;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .sidebar-content-nav {
+        color: #EEEEEE;
+        padding: 5px 10px;
+    }
+}

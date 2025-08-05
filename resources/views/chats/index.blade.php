@@ -6,7 +6,7 @@
 
     <div class="chat-container">
         <x-chat.sidebar-left :dataset="[]" mode="default" />
-        <x-chat.main mode="[]" />
+        <x-chat.main mode="default" />
         <x-chat.sidebar-right />
     </div>
 </x-app.layout>

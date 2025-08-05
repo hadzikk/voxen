@@ -1,4 +1,10 @@
-@import 'tailwindcss';
+@use './auth/sign-in';
+@use './auth/sign-up';
+@use './chats/add-friend';
+@use './chats/index';
+@use './component/popup';
+
+@use 'tailwindcss';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';

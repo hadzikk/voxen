@@ -2,9 +2,6 @@
 
 <div class="sidebar-left">
     <div class="sidebar-left-header">
-        <h1 class="greeting-user">
-            Welcome <span class="user-fullname">{{ Auth::user()->firstname . " " . Auth::user()->lastname }}</span>
-        </h1>
         <div class="profile-user">
             <figure class="user-picture-container">
                 <img 
@@ -21,18 +18,18 @@
     </div>
 
     <div class="sidebar-left-navbar">
-        <a href="/chat/friendrequest"><i class="fa-solid icon-left-navbar fa-user-plus"></i></a>
-        <a href="/chat/friends"><i class="fa-solid icon-left-navbar fa-address-book" title="Friends"></i></a>
-        <a href="/chat/conversations"><i class="fa-solid icon-left-navbar fa-comment"></i></a>
+        <a href="{{ route('friends.requests.list') }}"><i class="fa-solid icon-left-navbar fa-user-plus"></i></a>
+        <a href="{{ route('friends.list') }}"><i class="fa-solid icon-left-navbar fa-address-book" title="Friends"></i></a>
+        <a href="{{ route('groups.index') }}"><i class="fa-solid icon-left-navbar fa-comment"></i></a>
     </div>
 
-    <ul>
+    <ul class="sidebar-left-list-container">
         @if ($mode === "friends")
             <div class="sidebar-content">
                 <span class="sidebar-content-title">Friends</span>
             </div>
             @foreach (Auth::user()->allFriends() as $friend)
-                <li>
+                <li class="sidebar-left-list">
                     <a href="/chat/p/{{ $friend->username }}">
                         <figure class="contact-picture-container">
                             <img 
@@ -54,15 +51,15 @@
                 </li>
             @endforeach
 
-        @elseif ($mode === "conversation")
+        @elseif ($mode === "group")
         <div class="sidebar-content">
-            <span class="sidebar-content-title">Conversations</span>
-            <a href="#" class="sidebar-content-feature" onclick="popupCreateGroup()">create group</a>
+            <span class="sidebar-content-title">Groups</span>
+            <p class="sidebar-content-feature button-create-group">create group</p>
         </div>
 
         @forelse ($dataset as $group)
-            <li>
-                <a href="/chat/g/{{ $group->slug }}">
+            <li class="sidebar-left-list">
+                <a href="{{ route('groups.index')."/".$group->slug }}">
                     <figure class="contact-picture-container">
                         <img
                             src="{{ $group->profile_picture ? asset('storage/' . $group->profile_picture) : asset('images/default_group_profile.jpg') }}"
@@ -82,20 +79,19 @@
                 </a>
             </li>
         @empty
-            <li><p class="text-gray-500 text-sm px-4">No groups yet.</p></li>
+            <li class="sidebar-left-list"><p class="text-gray-500 text-sm px-4">No groups yet.</p></li>
         @endforelse
 
 
         @elseif ($mode === "default")
-            {{-- Kosongkan atau isi sesuai kebutuhan --}}
 
-        @elseif ($mode === "friendrequest")
+        @elseif ($mode === "friendRequests")
             <div class="sidebar-content">
                 <span class="sidebar-content-title">Friend requests</span>
-                <a href="/chat/addfriend" class="sidebar-content-feature">add friend</a>
+                <a href="{{ route('friends.search') }}" class="sidebar-content-feature">add friend</a>
             </div>
             @foreach ($dataset as $request)
-                <li>
+                <li class="sidebar-left-list">
                     <a>
                         <figure class="contact-picture-container">
                             <img 
@@ -112,8 +108,7 @@
                             <div class="contact-additional-info">
                                 <p class="contact-last-chat">{{ Str::limit('request to be friends.', 26, '...') }}</p>
                                 <div class="contact-request flex gap-2">
-                                    {{-- Accept --}}
-                                    <form action="/chat/friendrequest/{{ $request->id }}/accept" method="POST">
+                                    <form action="{{ route('friends.requests.accept', ['id' => $request->id]) }}" method="POST">
                                         @csrf
                                         <button type="submit" style="background: none; border: none; cursor: pointer; outline: none;">
                                             <i class="fa-solid fa-check text-green-600"></i>
@@ -121,7 +116,7 @@
                                     </form>
 
                                     {{-- Decline --}}
-                                    <form action="/chat/friendrequest/{{ $request->id }}/decline" method="POST">
+                                    <form action="{{ route('friends.requests.decline', ['id' => $request->id]) }}" method="POST">
                                         @csrf
                                         <button type="submit" style="background: none; border: none; cursor: pointer; outline: none;">
                                             <i class="fa-solid fa-xmark text-red-600"></i>
