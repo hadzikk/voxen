@@ -64,7 +64,7 @@
         <a href="{{ route('groups.index')."/".$group->slug }}">
             <figure class="contact-picture-container">
                 <img
-                    src="{{ $group->group_image ? asset('storage/' . $group->group_image) : asset('images/Deafult PFP _ @davy3k.jpg') }}"
+                    src="{{ $group->groupImage ? asset('storage/'.$group->groupImage) : asset('images/Deafult PFP _ @davy3k.jpg') }}"
                     alt="Group Image" 
                     class="contact-picture"
                 >

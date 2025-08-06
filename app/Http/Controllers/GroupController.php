@@ -58,13 +58,12 @@ class GroupController extends Controller
             $group = Group::create([
                 'owner_id'    => Auth::id(),
                 'name'        => $validated['name'],
-                'group_image' => $profilePath, // ✅ sesuai kolom di database
+                'groupImage' => $profilePath,
                 'slug'        => 'temp',
                 'description' => $validated['description'] ?? null,
             ]);
 
             // Debug untuk memastikan data benar
-            // \Log::info('Data Group:', $group->toArray());
 
             // Buat slug unik pendek (nama-group-ABCDE)
             $shortSlug = Str::slug($validated['name']) . '-' . Str::upper(Str::random(5));
