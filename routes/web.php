@@ -25,5 +25,5 @@ Route::post('/friends/requests/{id}/accept/search', [FriendController::class, 'a
 Route::post('/friends/requests/{id}/decline', [FriendController::class, 'declineFriendRequest'])->middleware('auth')->name('friends.requests.decline');
 
 Route::get('/groups', [GroupController::class, 'index'])->middleware('auth')->name('groups.index');
-Route::post('/groups', [GroupController::class, 'store'])->middleware('auth')->name('groups.create');
+Route::post('/groups', [GroupController::class, 'store'])->name('groups.store');
 Route::get('/groups/{slug}', [GroupController::class, 'groupRoomChat'])->middleware('auth')->name('groups.chat');

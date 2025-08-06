@@ -4,12 +4,14 @@
 @use '../components/sidebar-left-list-container';
 @use '../components/sidebar-left-list';
 @use '../components/sidebar-left-navigation';
+@use '../components/sidebar-empty-state';
 
 .sidebar-left {
     position: relative;
     width: 25%;
     border-right: 1px solid #dddddd;
     overflow-y: auto;
+    overflow: hidden;
     padding: 20px;
 }
 

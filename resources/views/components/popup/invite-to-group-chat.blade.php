@@ -16,17 +16,25 @@
         </div>
 
         <ul class="pig-friend-list-container">
-            @foreach (Auth::user()->allFriends() as $friend)
-                <li class="pig-friend-list">
-                    <div class="pig-friend-info">
-                        <figure class="pig-friend-picture-container">
-                            <img src="{{ asset('images/Deafult PFP _ @davy3k.jpg') }}" alt="" class="pig-friend-picture">
-                        </figure>
-                        <p class="pig-friend-username">{{ $friend->username }}</p>
-                    </div>
-                    <form action="{{ route('groups.create') }}" method="post"></form>
-                </li>
-            @endforeach
-        </ul>
+    @foreach (Auth::user()->allFriends() as $friend)
+        <li class="pig-friend-list" 
+            data-id="{{ $friend->id }}" 
+            data-name="{{ $friend->username }}" 
+            data-picture="{{ $friend->picture ? asset('storage/images/'.$friend->picture) : asset('images/Deafult PFP _ @davy3k.jpg') }}"
+            data-selected="false">
+            <div class="pig-friend-info">
+                <figure class="pig-friend-picture-container">
+                    <img src="{{ $friend->picture ? asset('storage/images/'.$friend->picture) : asset('images/Deafult PFP _ @davy3k.jpg') }}" alt="" class="pig-friend-picture">
+                </figure>
+                <p class="pig-friend-username">{{ $friend->username }}</p>
+            </div>
+            <button type="button" class="pig-invite-btn">
+                <i class="fa-solid fa-user-plus"></i>
+            </button>
+        </li>
+    @endforeach
+</ul>
+
+
     </div>
 </div>

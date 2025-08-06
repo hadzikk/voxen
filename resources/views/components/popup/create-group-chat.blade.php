@@ -1,93 +1,47 @@
 <div class="popup-create-group-container">
     <div class="popup-create-group">
-        <div class="pcg-navigation">
-            <p class="pcg-title">Create a group</p>
-            <i class="fa-solid fa-xmark" id="close-popup-create-group"></i>
-        </div>
-        <div class="pcg-profile-picture-wrapper">
-            <label for="groupImage" class="pcg-profile-picture-container">
-                <img src="{{ asset('images/gallery.png') }}" alt="" class="pcg-profile-picture">
-                <input type="file" id="groupImage" name="groupImage" accept="image/*" hidden>
-                <i class="fas fa-pen pcg-edit-icon"></i>
-            </label>
-        </div>
+        <form action="{{ route('groups.store') }}" method="POST" enctype="multipart/form-data" class="popup-create-group-form">
+            @csrf
+            <div class="pcg-navigation">
+                <p class="pcg-title"></p>
+                <i class="fa-solid fa-xmark" id="close-popup-create-group"></i>
+            </div>
 
-        <div class="pcg-friends-container">
-            <label for="" class="pcg-friend-label">Friends</label>
-            <div class="pcg-invited-friends-container">
-                <div class="pcg-friend-bubble" id="pcg-friend-bubble">
-                    <figure class="pcg-friend-profile-picture-container">
-                        <img src="{{ asset('images/Deafult PFP _ @davy3k.jpg') }}" alt="" class="pcg-friend-profile-picture">
-                    </figure>
-                    <div class="pcg-friend-profile">
-                        <p class="pcg-friend-username">salshanandia</p>
+            <!-- Profile Picture -->
+            <div class="pcg-profile-picture-wrapper">
+                <label for="groupImage" class="pcg-profile-picture-container">
+                    <img src="{{ asset('images/gallery.png') }}" alt="Group Image Preview" class="pcg-profile-picture">
+                    <input type="file" id="groupImage" name="groupImage" accept="image/*" style="display: none;">
+                    <i class="fas fa-pen pcg-edit-icon"></i>
+                </label>
+            </div>
+
+            <!-- Friends Invite -->
+            <div class="pcg-friends-container">
+                <label class="pcg-friend-label">Friends</label>
+                <div class="pcg-invited-friends-container">
+                    <div class="pcg-btn-addfriend-container" id="pcg-invite-friend">
+                        <span class="pcg-btn-addfriend"><i class="fa-solid fa-user-plus"></i></span>
                     </div>
-                    <i class="fa-solid fa-xmark" id="pcg-remove-friend"></i>
-                </div>
-
-                <div class="pcg-friend-bubble" id="pcg-friend-bubble">
-                    <figure class="pcg-friend-profile-picture-container">
-                        <img src="{{ asset('images/car with horn.jpg') }}" alt="" class="pcg-friend-profile-picture">
-                    </figure>
-                    <div class="pcg-friend-profile">
-                        <p class="pcg-friend-username">andinaainurizkyrahayu</p>
-                    </div>
-                    <i class="fa-solid fa-xmark" id="pcg-remove-friend"></i>
-                </div>
-
-                <div class="pcg-friend-bubble" id="pcg-friend-bubble">
-                    <figure class="pcg-friend-profile-picture-container">
-                        <img src="{{ asset('images/elsa.jpg') }}" alt="" class="pcg-friend-profile-picture">
-                    </figure>
-                    <div class="pcg-friend-profile">
-                        <p class="pcg-friend-username">keyshacuwarman</p>
-                    </div>
-                    <i class="fa-solid fa-xmark" id="pcg-remove-friend"></i>
-                </div>
-
-                <div class="pcg-friend-bubble" id="pcg-friend-bubble">
-                    <figure class="pcg-friend-profile-picture-container">
-                        <img src="{{ asset('images/Lucy.jpg') }}" alt="" class="pcg-friend-profile-picture">
-                    </figure>
-                    <div class="pcg-friend-profile">
-                        <p class="pcg-friend-username">annisaputriseptiani</p>
-                    </div>
-                    <i class="fa-solid fa-xmark" id="pcg-remove-friend"></i>
-                </div>
-
-                <div class="pcg-friend-bubble" id="pcg-friend-bubble">
-                    <figure class="pcg-friend-profile-picture-container">
-                        <img src="{{ asset('images/gorillaz.jpg') }}" alt="" class="pcg-friend-profile-picture">
-                    </figure>
-                    <div class="pcg-friend-profile">
-                        <p class="pcg-friend-username">hadzikmochammadsofyan</p>
-                    </div>
-                    <i class="fa-solid fa-xmark" id="pcg-remove-friend"></i>
-                </div>
-
-                <div class="pcg-friend-bubble" id="pcg-friend-bubble">
-                    <figure class="pcg-friend-profile-picture-container">
-                        <img src="{{ asset('images/devin.jpg') }}" alt="" class="pcg-friend-profile-picture">
-                    </figure>
-                    <div class="pcg-friend-profile">
-                        <p class="pcg-friend-username">devinnaziasyadzili</p>
-                    </div>
-                    <i class="fa-solid fa-xmark" id="pcg-remove-friend"></i>
-                </div>
-
-                <div class="pcg-btn-addfriend-container" id="pcg-invite-friend">
-                    <span class="pcg-btn-addfriend" id="pcg-btn-addfriend"><i class="fa-solid fa-user-plus"></i></span>
                 </div>
             </div>
-        </div>
 
-        <div class="pcg-input-container">
-            <label for="" class="pcg-label">Group name</label>
-            <input type="text" placeholder="What should the group name be?" class="pcg-input">
-        </div>
-        <div class="pcg-input-container">
-            <label for="" class="pcg-label">Description</label>
-            <textarea name="" id="" placeholder="How would you describe this group?" class="pcg-textarea"></textarea>
-        </div>
+            <!-- Group Name -->
+            <div class="pcg-input-container">
+                <label class="pcg-label">Group name</label>
+                <input type="text" name="name" placeholder="What should the group name be?" class="pcg-input" required>
+            </div>
+
+            <!-- Description -->
+            <div class="pcg-input-container">
+                <label class="pcg-label">Description</label>
+                <textarea name="description" placeholder="How would you describe this group?" class="pcg-textarea"></textarea>
+            </div>
+
+            <!-- Submit -->
+            <div class="pcg-input-container">
+                <button class="popup-create-group-btn" type="submit">Done</button>
+            </div>
+        </form>
     </div>
 </div>

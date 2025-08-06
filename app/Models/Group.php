@@ -11,13 +11,7 @@ class Group extends Model
     public function users()
     {
         return $this->belongsToMany(User::class, 'group_users')
-                    ->withPivot('status')
+                    ->withPivot('status', 'role')
                     ->withTimestamps();
     }
-
-    public function owner()
-    {
-        return $this->belongsTo(User::class, 'owner_id');
-    }
-
 }

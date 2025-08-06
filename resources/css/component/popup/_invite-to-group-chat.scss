@@ -122,7 +122,20 @@
                     .pig-friend-username {
                         color: #000;
                     }
-                } 
+                }
+                
+                .pig-invite-btn {
+                    background: #000;
+                    border-radius: 4px;
+                    font-size: x-small;
+                    padding: 5px;
+                    border: none;
+                    outline: none;
+                }
+
+                .pig-invite-btn:hover {
+                    background: gray;
+                }
 
                 .pig-label {
                     background: #000;
