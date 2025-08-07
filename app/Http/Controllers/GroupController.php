@@ -34,6 +34,48 @@ class GroupController extends Controller
         ]);
     }
 
+    public function groupRoomChat($slug)
+    {
+        $user = Auth::user();
+
+        // Ambil grup berdasarkan slug
+        $group = Group::where('slug', $slug)->firstOrFail();
+
+        // Cek apakah user adalah owner atau anggota grup
+        $isOwner = $group->owner_id === $user->id;
+        $isMember = $group->members()->where('users.id', $user->id)->wherePivot('status', 'accepted')->exists();
+
+        if (!($isOwner || $isMember)) {
+            abort(403, 'You are not a member of this group.');
+        }
+
+        // Ambil semua grup milik user (untuk sidebar, dll)
+        $ownedGroups = Group::where('owner_id', $user->id)->get();
+        $joinedGroups = $user->groups()->wherePivot('status', 'accepted')->get();
+        $groups = $ownedGroups->merge($joinedGroups)->unique('id')->values();
+
+        // Ambil semua teman user
+        $alreadyFriends = $user->allFriends()
+            ->map(fn($friendship) =>
+                $friendship->friend_id === $user->id ? $friendship->user : $friendship->friend
+            );
+
+        // Ambil anggota grup (yang accepted)
+        $members = $group->acceptedMembers()->get();
+
+        // Ambil riwayat chat group (jika ada kolom group_id)
+        $messages = $group->messages()->with('sender')->latest()->take(50)->get()->reverse();
+
+        return view('groups.room-chat', [
+            'title'    => 'Groups',
+            'groups'   => $groups,
+            'group'    => $group,
+            'members'  => $members,
+            'messages' => $messages,
+            'friends'  => $alreadyFriends,
+        ]);
+    }
+
     /**
      * Menyimpan grup baru, menautkan pembuat sebagai admin dan mengundang anggota
      */

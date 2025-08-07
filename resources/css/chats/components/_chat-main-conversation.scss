@@ -1,0 +1,11 @@
+.chat-main-conversation {
+    width: 100%;
+    height: 100%;
+
+    .chat-main-bubble {
+        max-width: 320px;
+        padding: 10px;
+        background: #181C14;
+        border-radius: 4px;
+    }
+}

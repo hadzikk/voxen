@@ -1,0 +1,26 @@
+.chat-main-header {
+    width: 100%;
+    padding: 10px 20px;
+    background: #181C14;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .chat-main-picture-container {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+
+        .chat-main-picture {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 50%;
+        }
+    }
+
+    .chat-main-group-name {
+        font-weight: 600;
+    }
+}

@@ -17,12 +17,21 @@
         </div>
     </div>
 
+    @if ($mode === "groupRoomChat")
+    <div class="sidebar-left-navbar">
+        <a href="{{ route('friends.requests.list') }}"><i class="fa-solid icon-left-navbar fa-user-plus"></i></a>
+        <a href="{{ route('friends.list') }}"><i class="fa-solid icon-left-navbar fa-address-book" title="Friends"></i></a>
+        <a href=""><i class="fa-solid icon-left-navbar fa-comment"></i></a>
+        <i class="fa-solid fa-door-open" id="logout"></i>
+    </div>
+    @else
     <div class="sidebar-left-navbar">
         <a href="{{ route('friends.requests.list') }}"><i class="fa-solid icon-left-navbar fa-user-plus"></i></a>
         <a href="{{ route('friends.list') }}"><i class="fa-solid icon-left-navbar fa-address-book" title="Friends"></i></a>
         <a href="{{ route('groups.index') }}"><i class="fa-solid icon-left-navbar fa-comment"></i></a>
         <i class="fa-solid fa-door-open" id="logout"></i>
     </div>
+    @endif
 
     <ul class="sidebar-left-list-container">
         @if ($mode === "friends")
@@ -53,14 +62,14 @@
                 </div>
             @endforelse
 
-        @elseif ($mode === "group")
+        @elseif ($mode === "group" || $mode === "groupRoomChat")
         <div class="sidebar-content">
             <span class="sidebar-content-title">Groups</span>
             <p class="sidebar-content-feature button-create-group">create group</p>
         </div>
 
         @forelse ($dataset as $group)
-    <li class="sidebar-left-list">
+        <li class="sidebar-left-list">
         <a href="{{ route('groups.index')."/".$group->slug }}">
             <figure class="contact-picture-container">
                 <img
